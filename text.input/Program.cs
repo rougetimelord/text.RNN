@@ -24,13 +24,21 @@ namespace text.split
             List <string> strList= new List<string>();
             Dictionary<string, Word> words = new Dictionary<string, Word>();
             strList = strB.ToString().ToLower().Split().Where(c => c!="").ToList();
+            string pre = "";
             int currPerc, oldPerc = -1, i = 0;
             foreach(string str in strList)
             {
-                if (words.ContainsKey(str))
-                    words[str].count++;
-                else
-                    words.Add(str, new Word());
+                if (words.ContainsKey(pre))
+                {
+                    words[pre].count++;
+                    words[pre].nextWord(str);
+                }
+                else if (pre != "")
+                {
+                    words.Add(pre, new Word());
+                    words[pre].nextWord(str);
+                }
+                pre = str;
                 currPerc = (int)Math.Round(((float)i / (float)strList.Count)*100, 1);
                 if (currPerc > oldPerc)
                 {
@@ -52,6 +60,11 @@ namespace text.split
                 float percent = (float)Math.Round(((float)wo.Value.count / (float)strList.Count) * 100,4);
                 string txt = String.Format(@"{0} {1}", wo.Key, percent) + Environment.NewLine;
                 File.AppendAllText(p, txt);
+                foreach(KeyValuePair<string,float> next in wo.Value.nexts)
+                {
+                    txt = "    " + String.Format(@"-{0} -{1}", next.Key, Math.Round(next.Value / wo.Value.nexts.Count * 100, 4))+Environment.NewLine;
+                    File.AppendAllText(p, txt);
+                }
                 currPerc = (int)Math.Round(((float)i / (float)words.Count) * 100, 1);
                 if (currPerc > oldPerc)
                 {
