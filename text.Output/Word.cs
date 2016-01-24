@@ -11,10 +11,9 @@ namespace text.Output
         public string wordStr = "";
         public float perc = 0;
         public int floor = 0;
-        public word(string[] wordInfo)
+        public word(string wordInfo)
         {
-            wordStr = wordInfo[0];
-            float.TryParse(wordInfo[1], out perc);
+            float.TryParse(wordInfo, out perc);
         }
         public void floorSet(int fl)
         {

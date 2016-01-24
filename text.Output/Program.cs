@@ -16,19 +16,19 @@ namespace text.Output
             var p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\Output.txt";
             var inStr = File.ReadAllText(p);
             var strArr = inStr.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-            List<word> words = new List<word>();
+            Dictionary<word, string> words = new Dictionary<word, string>();
             Random r = new Random();
             string output = "";
             for (int i = 0; i < strArr.Count(); i++)
             {
                 var wordSplit = strArr[i].Split(null);
-                words.Add(new word(wordSplit));
+                words.Add(new word(wordSplit[1]), wordSplit[0]);
             }
             int currentMax = 0, currentVal = 0;
-            foreach (word wo in words)
+            foreach (KeyValuePair<word,string> wo in words)
             {
-                wo.floorSet(currentVal);
-                currentMax = currentVal + (int)(wo.perc * 10000);
+                wo.Key.floorSet(currentVal);
+                currentMax = currentVal + (int)(wo.Key.perc * 10000);
                 currentVal = currentMax;
             }
             p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\text.output.txt";
@@ -46,11 +46,11 @@ namespace text.Output
                     oldPerc = currPerc;
                 }
                 int rRes = r.Next(1, currentMax + 1);
-                foreach (word wo in words)
+                foreach (KeyValuePair<word, string> wo in words)
                 {
-                    if (wo.floor <= rRes && rRes <= (wo.floor + (int)(wo.perc * 10000)))
+                    if (wo.Key.floor <= rRes && rRes <= (wo.Key.floor + (int)(wo.Key.perc * 10000)))
                     {
-                        output = wo.wordStr + " ";
+                        output = wo.Value + " ";
                         File.AppendAllText(p, output);
                     }
                 }

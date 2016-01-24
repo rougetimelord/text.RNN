@@ -21,27 +21,24 @@ namespace text.split
             inStr.Replace(Environment.NewLine, " ");
             var strB = new StringBuilder();
             foreach (char c in inStr){if (!char.IsPunctuation(c) && (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c))) { strB.Append(c);}}
-            var found = false;
-            List < string > strList= new List<string>();
-            List<Word> words = new List<Word>();
+            List <string> strList= new List<string>();
+            Dictionary<string, Word> words = new Dictionary<string, Word>();
             strList = strB.ToString().ToLower().Split().Where(c => c!="").ToList();
-            for (int i = 0; i < strList.Count; i++)
+            int currPerc, oldPerc = -1, i = 0;
+            foreach(string str in strList)
             {
-                var strCheck = strList[i];
-                found = false;
-                foreach (Word wordInst in words)
+                if (words.ContainsKey(str))
+                    words[str].count++;
+                else
+                    words.Add(str, new Word());
+                currPerc = (int)Math.Round(((float)i / (float)strList.Count)*100, 1);
+                if (currPerc > oldPerc)
                 {
-                    if (wordInst.word == strCheck && !found)
-                    {
-                        found = true;
-                        wordInst.count++;
-                        break;
-                    }
+                    Console.Clear();
+                    Console.Write(currPerc+"%");
+                    oldPerc = currPerc;
                 }
-                if (!found || words.Count == 0)
-                {
-                    words.Add(new Word(strCheck));
-                }
+                i++;
             }
             #endregion
             #region Write data
@@ -49,11 +46,20 @@ namespace text.split
             if(File.Exists(p))
                 File.Delete(p);
             Console.Clear();
-            foreach (Word wo in words.OrderByDescending(o => o.count).ThenBy(s => s.word).ToList())
+            currPerc = 0; oldPerc = -1; i = 0;
+            foreach (KeyValuePair<string, Word> wo in words.OrderByDescending(o => o.Value.count).ThenBy(s => s.Key).ToList())
             {
-                float percent = (float)Math.Round(((float)wo.count / (float)strList.Count) * 100,4);
-                string txt = String.Format(@"{0} {1}", wo.word, percent) + Environment.NewLine;
+                float percent = (float)Math.Round(((float)wo.Value.count / (float)strList.Count) * 100,4);
+                string txt = String.Format(@"{0} {1}", wo.Key, percent) + Environment.NewLine;
                 File.AppendAllText(p, txt);
+                currPerc = (int)Math.Round(((float)i / (float)words.Count) * 100, 1);
+                if (currPerc > oldPerc)
+                {
+                    Console.Clear();
+                    Console.Write(currPerc + "%");
+                    oldPerc = currPerc;
+                }
+                i++;
             }
             #endregion
         }

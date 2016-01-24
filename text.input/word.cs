@@ -9,10 +9,8 @@ namespace text.split
     class Word
     {
         public int count = 1;
-        public string word = "";
-        public Word(string a)
+        public Word()
         {
-            word = a;
         }
     }
 }
