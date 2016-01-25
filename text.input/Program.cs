@@ -28,14 +28,16 @@ namespace text.split
             int currPerc, oldPerc = -1, i = 0;
             foreach(string str in strList)
             {
-                if (words.ContainsKey(pre))
+                if (pre != "")
                 {
-                    words[pre].count++;
-                    words[pre].nextWord(str);
-                }
-                else if (pre != "")
-                {
-                    words.Add(pre, new Word());
+                    if (words.ContainsKey(pre))
+                    {
+                        words[pre].count++;
+                    }
+                    else
+                    {
+                        words.Add(pre, new Word());
+                    }
                     words[pre].nextWord(str);
                 }
                 pre = str;
@@ -43,7 +45,7 @@ namespace text.split
                 if (currPerc > oldPerc)
                 {
                     Console.Clear();
-                    Console.Write(currPerc+"%");
+                    Console.Write(currPerc+"% Crunched");
                     oldPerc = currPerc;
                 }
                 i++;
@@ -51,8 +53,6 @@ namespace text.split
             #endregion
             #region Write data
             p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\Output.txt";
-            if(File.Exists(p))
-                File.Delete(p);
             Console.Clear();
             currPerc = 0; oldPerc = -1; i = 0;
             foreach (KeyValuePair<string, Word> wo in words.OrderByDescending(o => o.Value.count).ThenBy(s => s.Key).ToList())
@@ -62,14 +62,14 @@ namespace text.split
                 File.AppendAllText(p, txt);
                 foreach(KeyValuePair<string,float> next in wo.Value.nexts)
                 {
-                    txt = "    " + String.Format(@"-{0} -{1}", next.Key, Math.Round(next.Value / wo.Value.nexts.Count * 100, 4))+Environment.NewLine;
+                    txt = "    " + String.Format(@"-{0} {1}", next.Key, (float)Math.Round((next.Value / wo.Value.nexts.Count) * 100, 4))+Environment.NewLine;
                     File.AppendAllText(p, txt);
                 }
                 currPerc = (int)Math.Round(((float)i / (float)words.Count) * 100, 1);
                 if (currPerc > oldPerc)
                 {
                     Console.Clear();
-                    Console.Write(currPerc + "%");
+                    Console.Write(currPerc + "% Written");
                     oldPerc = currPerc;
                 }
                 i++;
