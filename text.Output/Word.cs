@@ -8,13 +8,13 @@ namespace text.Output
 {
     class word
     {
-        public float perc = 0;
+        public float points = 0;
         public int floor = 0;
         public Dictionary<string, next> nexts = new Dictionary<string, next>();
         public int nextsCurrentVal = 0;
         public word(string wordInfo)
         {
-            float.TryParse(wordInfo, out perc);
+            float.TryParse(wordInfo, out points);
         }
         public void floorSet(int fl)
         {
@@ -26,10 +26,10 @@ namespace text.Output
             float nextPerc;
             float.TryParse(a[1], out nextPerc);
             if(!nexts.ContainsKey(next))
-                nexts.Add(next, new next(perc));
+                nexts.Add(next, new next(points));
             else
             {
-                nexts[next].perc = (perc + nexts[next].perc) / 2;
+                nexts[next].points = (points + nexts[next].points) / 2;
             }
         }
         public void nextFloorSet()
@@ -37,7 +37,7 @@ namespace text.Output
             foreach (KeyValuePair<string, next> next in nexts)
             {
                 next.Value.floorSetNext(nextsCurrentVal);
-                nextsCurrentVal += (int)(next.Value.perc * 10000);
+                nextsCurrentVal += (int)(next.Value.points * 10000);
             }
         }
     }

@@ -8,11 +8,11 @@ namespace text.Output
 {
     class next
     {
-        public float perc;
+        public float points;
         public float floorVar;
         public next(float p)
         {
-            perc = p;
+            points = p;
         }
         public void floorSetNext(float f)
         {

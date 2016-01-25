@@ -35,21 +35,21 @@ namespace text.Output
                 {
                     int tempP;
                     int.TryParse(wordSplit[1], out tempP);
-                    words[wordSplit[0]].perc = (words[wordSplit[0]].perc + tempP) / 2;
+                    words[wordSplit[0]].points = (words[wordSplit[0]].points + tempP) / 2;
                 }
             }
             int currentVal = 0;
             foreach (KeyValuePair<string, word> wo in words)
             {
                 wo.Value.floorSet(currentVal);
-                currentVal += (int)(wo.Value.perc * 10000);
+                currentVal += (int)(wo.Value.points * 10000);
                 wo.Value.nextFloorSet();
             }
             int rResult = r.Next(currentVal + 1);
             pre = "";
             foreach (KeyValuePair<string, word> wo in words)
             {
-                if (rResult >= wo.Value.floor && rResult < wo.Value.floor + (wo.Value.perc * 10000))
+                if (rResult >= wo.Value.floor && rResult < wo.Value.floor + (wo.Value.points * 10000))
                 {
                     output = wo.Key + " ";
                     pre = wo.Key;
@@ -65,7 +65,7 @@ namespace text.Output
                 rResult = r.Next(words[pre].nextsCurrentVal + 1);
                 foreach(KeyValuePair<string,next> nxt in words[pre].nexts)
                 {
-                    if (nxt.Value.floorVar <= rResult && rResult < nxt.Value.floorVar + nxt.Value.perc * 10000)
+                    if (nxt.Value.floorVar <= rResult && rResult < nxt.Value.floorVar + nxt.Value.points * 10000)
                     {
                         output = nxt.Key + " ";
                         pre = nxt.Key;
