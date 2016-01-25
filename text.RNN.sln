@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "text.input", "text.input\text.input.csproj", "{4A0CD814-DC45-477E-9065-CCD9C8F207BB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "text.Learner", "text.input\text.Learner.csproj", "{4A0CD814-DC45-477E-9065-CCD9C8F207BB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "text.Output", "text.Output\text.Output.csproj", "{2D4F1ADD-9371-40CE-923E-E4824E94B630}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "text.Speaker", "text.Output\text.Speaker.csproj", "{2D4F1ADD-9371-40CE-923E-E4824E94B630}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

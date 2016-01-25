@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace text.split
+namespace text.Learner
 {
     class Program
     {
@@ -52,7 +52,7 @@ namespace text.split
             }
             #endregion
             #region Write data
-            p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\Output.txt";
+            p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\brain.rouge";
             Console.Clear();
             currPerc = 0; oldPerc = -1; i = 0;
             foreach (KeyValuePair<string, Word> wo in words.OrderByDescending(o => o.Value.count).ThenBy(s => s.Key).ToList())

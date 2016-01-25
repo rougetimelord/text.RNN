@@ -4,21 +4,19 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace text.Learner
+namespace text.Scorer
 {
-    class Word
+    class Learned
     {
-        public int count = 1;
+        public float points = 0;
         public Dictionary<string, float> nexts = new Dictionary<string, float>();
-        public Word()
+        public Learned(string s)
         {
+            points = float.Parse(s);
         }
-        public void nextWord(string next)
+        public void addNext(string[] a)
         {
-            if (nexts.ContainsKey(next))
-                nexts[next]++;
-            else
-                nexts.Add(next, 1);
+            nexts.Add(a[0], float.Parse(a[1]));
         }
     }
 }

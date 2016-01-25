@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace text.Output
+namespace text.Speaker
 {
     class Program
     {
@@ -13,7 +13,7 @@ namespace text.Output
         {
             if(!Directory.Exists(@"\Users\" + Environment.UserName + @"\Documents\text.RNN"))
                 Directory.CreateDirectory(@"\Users\" + Environment.UserName + @"\Documents\text.RNN");
-            var p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\Output.txt";
+            var p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\brain.rouge";
             var inStr = File.ReadAllText(p);
             var strArr = inStr.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
             Dictionary<string, word> words = new Dictionary<string, word>();
