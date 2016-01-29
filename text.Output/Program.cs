@@ -62,13 +62,29 @@ namespace text.Speaker
             int currPerc = 0, oldPerc = 0;
             for(int i = 0; i <= 1000; i++)
             {
-                rResult = r.Next(words[pre].nextsCurrentVal + 1);
-                foreach(KeyValuePair<string,next> nxt in words[pre].nexts)
+                if (words[pre].nexts.Count > 0)
                 {
-                    if (nxt.Value.floorVar <= rResult && rResult < nxt.Value.floorVar + nxt.Value.points * 10000)
+                    rResult = r.Next(words[pre].nextsCurrentVal + 1);
+                    foreach (KeyValuePair<string, next> nxt in words[pre].nexts)
                     {
-                        output = nxt.Key + " ";
-                        pre = nxt.Key;
+                        if (nxt.Value.floorVar <= rResult && rResult < nxt.Value.floorVar + nxt.Value.points * 10000)
+                        {
+                            output = nxt.Key + " ";
+                            pre = nxt.Key;
+                            break;
+                        }
+                    }
+                }
+                else 
+                {
+                    rResult = r.Next(currentVal + 1);
+                    foreach (KeyValuePair<string, word> wo in words)
+                    {
+                        if (rResult >= wo.Value.floor && rResult < wo.Value.floor + (wo.Value.points * 10000))
+                        {
+                            output = wo.Key + " ";
+                            pre = wo.Key;
+                        }
                     }
                 }
                 File.AppendAllText(p, output);
