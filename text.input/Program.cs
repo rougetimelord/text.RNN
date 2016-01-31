@@ -50,7 +50,8 @@ namespace text.Learner
                 }
                 i++;
             }
-            words.Add(pre, new Word());
+            if(!words.ContainsKey(pre))
+                words.Add(pre, new Word());
             #endregion
             #region Write data
             p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\brain.rouge";
