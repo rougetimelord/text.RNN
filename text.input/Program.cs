@@ -61,10 +61,7 @@ namespace text.Learner
                 }
                 i++;
             }
-<<<<<<< HEAD
-=======
             //If last word isn't in the dictionary add it
->>>>>>> Scoring
             if(!words.ContainsKey(pre))
                 words.Add(pre, new Word());
             #endregion
