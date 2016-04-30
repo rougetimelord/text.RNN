@@ -8,11 +8,9 @@ namespace text.Scorer
 {
     class spoken
     {
-        Dictionary<string, int> nextSpoken = new Dictionary<string, int>();
-        int count = 0;
+        public Dictionary<string, int> nextSpoken = new Dictionary<string, int>();
         public spoken()
         {
-            count = 1;
         }
         public void addNext(string a)
         {
