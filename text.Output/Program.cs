@@ -60,7 +60,7 @@ namespace text.Speaker
                 File.Delete(p);
             File.AppendAllText(p, output);
             int currPerc = 0, oldPerc = 0;
-            for(int i = 0; i <= 1000; i++)
+            for(int i = 0; i <= 28; i++)
             {
                 if (words[pre].nexts.Count > 0)
                 {
