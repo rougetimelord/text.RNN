@@ -12,6 +12,7 @@ namespace text.Scorer
         static void Main(string[] args)
         {
             var p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\brain.rouge";
+            Console.WriteLine(@"Write anything but ""Merge"" to do score updates");
             var doScoring = true;
             if (Console.ReadLine().ToLower() == "merge")
                 doScoring = false;
@@ -65,12 +66,13 @@ namespace text.Scorer
                 while (go)
                 {
                     Console.WriteLine("Was the output readable? y/n");
-                    if (Console.ReadLine().ToLower() == "y")
+                    var resp = Console.ReadLine().ToLower();
+                    if (resp == "y")
                     {
                         reaction = true;
                         go = false;
                     }
-                    else if (Console.ReadLine().ToLower() == "n")
+                    else if (resp == "n")
                     {
                         reaction = false;
                         go = false;
@@ -125,6 +127,10 @@ namespace text.Scorer
                     }
                 }
                 Console.WriteLine("Scores updated, writing");
+            }
+            else
+            {
+                Console.WriteLine("Merged, writing");
             }
             p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\brain.rouge";
             File.WriteAllText(p,"");
