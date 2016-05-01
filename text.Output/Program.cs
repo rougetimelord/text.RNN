@@ -59,7 +59,6 @@ namespace text.Speaker
             if (File.Exists(p))
                 File.Delete(p);
             File.AppendAllText(p, output);
-            int currPerc = 0, oldPerc = 0;
             for(int i = 0; i <= 28; i++)
             {
                 if (words[pre].nexts.Count > 0)
@@ -88,14 +87,10 @@ namespace text.Speaker
                     }
                 }
                 File.AppendAllText(p, output);
-                currPerc = (int)Math.Round(((float)i / 1000) * 100, 1);
-                if (currPerc > oldPerc)
-                {
-                    Console.Clear();
-                    Console.Write(currPerc + "% Written");
-                    oldPerc = currPerc;
-                }
             }
+            Console.Clear();
+            Console.WriteLine("Done");
+            Console.ReadLine();
         }
     }
 }
