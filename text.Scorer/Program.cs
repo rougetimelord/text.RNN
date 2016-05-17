@@ -13,13 +13,45 @@ namespace text.Scorer
         Dictionary<string, spoken> spokenWords = new Dictionary<string, spoken>();
         static void Main(string[] args)
         {
+            Console.ForegroundColor = ConsoleColor.White;
             Program thisClass = new Program();
             /*This could be much better
             A menu??*/
-            Console.WriteLine(@"Write anything but ""Merge"" to do score updates");
+            var menu = true;
             var doScoring = true;
-            if (Console.ReadLine().ToLower() == "merge")
-                doScoring = false;
+            Console.WriteLine("Text.Scorer");
+            Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("1. S");
+            Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("core");
+            Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("2. M");
+            Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine("erge");
+            while (menu)
+            {
+                string choice = Console.ReadLine().ToLower();
+                switch(choice)
+                {
+                    case ("1"):
+                        menu = false;
+                        break;
+                    case ("s"):
+                        menu = false;
+                        break;
+                    case ("2"):
+                        menu = false;
+                        doScoring = false;
+                        break;
+                    case ("m"):
+                        menu = false;
+                        doScoring = false;
+                        break;
+                    default:
+                        break;
+                }
+            }
+            Console.Clear();
             //Read brain
             Thread brainThread = new Thread(thisClass.digestBrain);
             brainThread.Start();
@@ -31,6 +63,7 @@ namespace text.Scorer
                 {
                     Thread.Sleep(10);
                 }
+                Console.BackgroundColor = ConsoleColor.Black;
                 var go = true;
                 Boolean reaction = true;
                 while (go)
@@ -111,6 +144,7 @@ namespace text.Scorer
             {
                 while (brainThread.IsAlive)
                     Thread.Sleep(10);
+                Console.BackgroundColor = ConsoleColor.Black;
                 //If not scoring tell the user merge has completed
                 Console.WriteLine("Merged, writing");
             }
@@ -133,6 +167,7 @@ namespace text.Scorer
         }
         void digestBrain()
         {
+            Console.BackgroundColor = ConsoleColor.Blue;
             //Set path for brain
             var p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\brain.rouge";
             var inStr = File.ReadAllText(p);
@@ -168,6 +203,7 @@ namespace text.Scorer
         }
         void digestSpoken()
         {
+            Console.BackgroundColor = ConsoleColor.Yellow;
             //If doing scoring digest spoken words
             var pre = "";
             var p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\text.output.txt";
