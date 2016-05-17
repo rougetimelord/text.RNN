@@ -11,11 +11,14 @@ namespace text.Scorer
         public Dictionary<string, int> nextSpoken = new Dictionary<string, int>();
         public spoken()
         {
+            //Do I need a constructor? Probably
         }
         public void addNext(string a)
         {
+            //Add new branches
             if (!nextSpoken.ContainsKey(a))
                 nextSpoken.Add(a, 1);
+            //Or increase value of branch
             else
                 nextSpoken[a]++;
         }
