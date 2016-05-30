@@ -16,18 +16,12 @@ namespace text.Scorer
             Console.ForegroundColor = ConsoleColor.White;
             Program thisClass = new Program();
             /*This could be much better
-            A menu??*/
+            A menu??
+            WHOA*/
             var menu = true;
             var doScoring = true;
-            Console.WriteLine("Text.Scorer");
-            Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("1. S");
-            Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("core");
-            Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("2. M");
-            Console.ForegroundColor = ConsoleColor.White;
-                Console.WriteLine("erge");
+            Boolean verbiose = false;
+            drawMenu();
             while (menu)
             {
                 string choice = Console.ReadLine().ToLower();
@@ -46,6 +40,14 @@ namespace text.Scorer
                     case ("m"):
                         menu = false;
                         doScoring = false;
+                        break;
+                    case ("3"):
+                        verbiose = OptionsMenu();
+                        drawMenu();
+                        break;
+                    case("o"):
+                        verbiose = OptionsMenu();
+                        drawMenu();
                         break;
                     default:
                         break;
@@ -148,22 +150,37 @@ namespace text.Scorer
                 //If not scoring tell the user merge has completed
                 Console.WriteLine("Merged, writing");
             }
-            //Delete and rewrite brain
+            //Set path
             var p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\brain.rouge";
-            File.WriteAllText(p,"");
-            //Write by point value then alphabetically
+            //Write organized by point value then alphabetically
+            string str = "";
+            var i = 0;
             foreach (KeyValuePair<string, brain> br in thisClass.brain.OrderByDescending(o => o.Value.points).ThenBy(s => s.Key).ToList())
             {
                 //Write new scores for root nodes
                 string txt = String.Format(@"{0} {1}", br.Key, br.Value.points) + Environment.NewLine;
-                File.AppendAllText(p, txt);
+                str += txt;
                 //Then do the same for nexts
+                var ni = 0;
                 foreach (KeyValuePair<string, float> next in br.Value.nexts)
                 {
                     txt = "    " + String.Format(@"-{0} {1}", next.Key, next.Value + Environment.NewLine);
-                    File.AppendAllText(p, txt);
+                    str += txt;
+                    if (verbiose)
+                    {
+                        ni++;
+                        Console.WriteLine("Word {0} of {1} '{2}' in tree '{3}' is being processed", ni, br.Value.nexts.Count, next.Key,br.Key);
+                    }
+                }
+                if(verbiose)
+                {
+                    i++;
+                    Console.WriteLine("Word {0} of {1} '{2}' is being processed",i,thisClass.brain.Count,br.Key);
                 }
             }
+            //Delete and rewrite brain
+            File.WriteAllText(p, "");
+            File.AppendAllText(p, str);
         }
         void digestBrain()
         {
@@ -223,6 +240,41 @@ namespace text.Scorer
                 }
                 pre = strArr[i];
             }
-        } 
+        }
+        static bool OptionsMenu()
+        {
+            var a = false;
+            Console.Clear();
+            Console.WriteLine("Text.Scorer");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("1. S");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("ilent");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("2. V");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("erbiose");
+            var chk = Console.ReadLine().ToLower();
+            if (chk == "2" || chk == "v")
+                a = true;
+            return a;
+        }
+        static void drawMenu()
+        {
+            Console.Clear();
+            Console.WriteLine("Text.Scorer");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("1. S");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("core");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("2. M");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("erge");
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.Write("3. O");
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine("ptions");
+        }
     }
 }
