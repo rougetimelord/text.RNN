@@ -21,6 +21,7 @@ namespace text.Scorer
             var menu = true;
             var doScoring = true;
             Boolean verbiose = false;
+            bool error = false;
             drawMenu();
             while (menu)
             {
@@ -125,6 +126,7 @@ namespace text.Scorer
                             {
                                 //If errors happen warn the user and try to add it
                                 Console.WriteLine("Word {0} is not in the tree for {1}, adding it!", next, pre);
+                                error = true;
                                 if (score * ne.Value > 0)
                                     thisClass.brain[pre].nexts.Add(next, score * ne.Value);
                                 //If score would be >= 0 don't bother
@@ -136,6 +138,7 @@ namespace text.Scorer
                     else
                     {
                         //If root word isn't in brain just ignore
+                        error = true;
                         Console.WriteLine("Word {0} is not in the brain, not adding it", pre);
                         Console.Read();
                     }
@@ -164,7 +167,7 @@ namespace text.Scorer
                 var ni = 0;
                 foreach (KeyValuePair<string, float> next in br.Value.nexts)
                 {
-                    txt = "    " + String.Format(@"-{0} {1}", next.Key, next.Value + Environment.NewLine);
+                    txt = "    " + String.Format(@"#{0} {1}", next.Key, next.Value) + Environment.NewLine;
                     str += txt;
                     if (verbiose)
                     {
@@ -181,6 +184,8 @@ namespace text.Scorer
             //Delete and rewrite brain
             File.WriteAllText(p, "");
             File.AppendAllText(p, str);
+            if (error)
+                Console.Read();
         }
         void digestBrain()
         {
@@ -195,10 +200,10 @@ namespace text.Scorer
                 /*Digests brain and merges entries
                 Could probably be done much better*/
                 var wordSplit = strArr[i].Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
-                if (wordSplit[0].Contains("-"))
+                if (wordSplit[0].Contains("#"))
                 {
                     //Add nexts
-                    wordSplit[0] = wordSplit[0].Replace("-", "");
+                    wordSplit[0] = wordSplit[0].Replace("#", "");
                     brain[pre].addNext(wordSplit);
                 }
                 else
@@ -225,9 +230,12 @@ namespace text.Scorer
             var pre = "";
             var p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\text.output.txt";
             var inStr = File.ReadAllText(p);
+            var strB = new StringBuilder();
+            foreach (char c in inStr) { if (c == '.' || c == ',') { strB.Append(" " + c + " "); } else { strB.Append(c); } }
+            inStr = strB.ToString().ToLower();
             var strArr = inStr.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
-            //Digesting by creating a mirror of the brain deictionary
+            //Digesting by creating a mirror of the brain dictionary
             for (int i = 0; i < strArr.Count(); i++)
             {
                 if (!spokenWords.ContainsKey(pre) && pre != "")
