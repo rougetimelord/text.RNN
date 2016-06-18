@@ -22,7 +22,8 @@ namespace text.Learner
             inStr.Replace(Environment.NewLine, " ");
             var strB = new StringBuilder();
             //Remove punctuation
-            foreach (char c in inStr){if (!char.IsPunctuation(c) && (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c))) { strB.Append(c);}}
+            char[] allowedPunc = { '.', '\'', ',', '-'};
+            foreach (char c in inStr){if (allowedPunc.Contains(c) || (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c))) {if (c != '.' && c != ',') strB.Append(c); else strB.Append(" " +  c  + " "); }}
             //Make a list for all of the words
             List <string> strList= new List<string>();
             //Make a dictionary for the words and word class instances
@@ -81,7 +82,7 @@ namespace text.Learner
                 //Then do the same for nexts
                 foreach(KeyValuePair<string,float> next in wo.Value.nexts)
                 {
-                    txt = "    " + String.Format(@"-{0} {1}", next.Key, (float)Math.Round((next.Value / wo.Value.nexts.Count) * 100, 4))+Environment.NewLine;
+                    txt = "    " + String.Format(@"#{0} {1}", next.Key, (float)Math.Round((next.Value / wo.Value.nexts.Count) * 100, 4))+Environment.NewLine;
                     File.AppendAllText(p, txt);
                 }
                 //Completion percentage

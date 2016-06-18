@@ -22,7 +22,7 @@ namespace text.Speaker
         }
         public void setNext(string[] a)
         {
-            string next = a[0].Replace("-", "");
+            string next = a[0].Replace("#", "");
             float nextPerc;
             float.TryParse(a[1], out nextPerc);
             if(!nexts.ContainsKey(next))

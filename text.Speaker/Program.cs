@@ -22,7 +22,7 @@ namespace text.Speaker
             for (int i = 0; i < strArr.Count(); i++)
             {
                 var wordSplit = strArr[i].Split(new string[] {" "}, StringSplitOptions.RemoveEmptyEntries);
-                if (wordSplit[0].Contains("-"))
+                if (wordSplit[0].Contains("#"))
                 {
                     words[pre].setNext(wordSplit);
                 }
@@ -51,14 +51,15 @@ namespace text.Speaker
             {
                 if (rResult >= wo.Value.floor && rResult < wo.Value.floor + (wo.Value.points * 10000))
                 {
-                    output = wo.Key + " ";
+                    output += wo.Key.First().ToString().ToUpper() + wo.Key.Substring(1) + " ";
                     pre = wo.Key;
                 }
             }
             p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\text.output.txt";
             if (File.Exists(p))
                 File.Delete(p);
-            File.AppendAllText(p, output);
+            bool capitalize = false;
+            bool done = false;
             for(int i = 0; i <= 28; i++)
             {
                 if (words[pre].nexts.Count > 0)
@@ -68,7 +69,21 @@ namespace text.Speaker
                     {
                         if (nxt.Value.floorVar <= rResult && rResult < nxt.Value.floorVar + nxt.Value.points * 10000)
                         {
-                            output = nxt.Key + " ";
+                            if (capitalize == true)
+                            {
+                                output += nxt.Key.First().ToString().ToUpper() + nxt.Key.Substring(1) + " ";
+                                capitalize = false;
+                                done = true;
+                            }
+                            if (nxt.Key == "." || nxt.Key == ",")
+                            {
+                                output = output.Remove(output.Length - 1);
+                                if (nxt.Key == ".")
+                                    capitalize = true;
+                            }
+                            if(!done)
+                                output += nxt.Key + " ";
+                            done = false;
                             pre = nxt.Key;
                             break;
                         }
@@ -81,13 +96,27 @@ namespace text.Speaker
                     {
                         if (rResult >= wo.Value.floor && rResult < wo.Value.floor + (wo.Value.points * 10000))
                         {
-                            output = wo.Key + " ";
+                            if (capitalize == true)
+                            {
+                                output += wo.Key.First().ToString().ToUpper() + wo.Key.Substring(1) + " ";
+                                capitalize = false;
+                                done = true;
+                            }
+                            if (wo.Key == ".")
+                            {
+                                output = output.Remove(output.Length - 1);
+                                if (wo.Key == ".")
+                                    capitalize = true;
+                            }
+                            if (!done)
+                                output += wo.Key + " ";
+                            done = false;
                             pre = wo.Key;
                         }
                     }
                 }
-                File.AppendAllText(p, output);
             }
+            File.AppendAllText(p, output);
             Console.Clear();
             Console.WriteLine("Done");
             Console.ReadLine();
