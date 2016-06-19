@@ -75,14 +75,16 @@ namespace text.Speaker
                                 capitalize = false;
                                 done = true;
                             }
-                            if (nxt.Key == "." || nxt.Key == ",")
+                            if (nxt.Key == "." || nxt.Key == "," || nxt.Key == ")")
                             {
                                 output = output.Remove(output.Length - 1);
                                 if (nxt.Key == ".")
                                     capitalize = true;
                             }
-                            if(!done)
+                            if(!done && nxt.Key != "(")
                                 output += nxt.Key + " ";
+                            if (!done && nxt.Key == "(")
+                                output += nxt.Key;
                             done = false;
                             pre = nxt.Key;
                             break;

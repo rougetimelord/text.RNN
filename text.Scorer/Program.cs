@@ -231,7 +231,7 @@ namespace text.Scorer
             var p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\text.output.txt";
             var inStr = File.ReadAllText(p);
             var strB = new StringBuilder();
-            foreach (char c in inStr) { if (c == '.' || c == ',') { strB.Append(" " + c + " "); } else { strB.Append(c); } }
+            foreach (char c in inStr) { if (c == '.' || c == ',' || c == '(' || c == ')') { strB.Append(" " + c + " "); } else { strB.Append(c); } }
             inStr = strB.ToString().ToLower();
             var strArr = inStr.Split(new string[] { " " }, StringSplitOptions.RemoveEmptyEntries);
 
