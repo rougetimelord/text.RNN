@@ -23,7 +23,7 @@ namespace text.Learner
             var strB = new StringBuilder();
             //Remove punctuation
             char[] allowedPunc = { '.', '\'', ',', '-', '(', ')'};
-            foreach (char c in inStr){if (allowedPunc.Contains(c) || (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c))) {if (c != '.' && c != ',' && c != '(' && c != ')') strB.Append(c); else strB.Append(" " +  c  + " "); }}
+            foreach (char c in inStr){if (allowedPunc.Contains(c) || (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c))) {if (!allowedPunc.Contains(c)) strB.Append(c); else strB.Append(" " +  c  + " "); }}
             //Make a list for all of the words
             List <string> strList= new List<string>();
             //Make a dictionary for the words and word class instances

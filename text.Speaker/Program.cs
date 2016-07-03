@@ -60,6 +60,7 @@ namespace text.Speaker
                 File.Delete(p);
             bool capitalize = false;
             bool done = false;
+            bool open = false;
             for(int i = 0; i <= 28; i++)
             {
                 if (words[pre].nexts.Count > 0)
@@ -75,16 +76,36 @@ namespace text.Speaker
                                 capitalize = false;
                                 done = true;
                             }
-                            if (nxt.Key == "." || nxt.Key == "," || nxt.Key == ")")
+                            if (nxt.Key == "." || nxt.Key == "," || nxt.Key == ")" || nxt.Key == "'" || nxt.Key == "-")
                             {
                                 output = output.Remove(output.Length - 1);
                                 if (nxt.Key == ".")
+                                {
                                     capitalize = true;
+                                    if (open)
+                                    {
+                                        output += ")";
+                                        done = true;
+                                        open = false;
+                                    }
+                                }
+                                if (nxt.Key == "'" || nxt.Key == "-"){
+                                    output += nxt.Key;
+                                    done = true;
+                                }
+                                if(nxt.Key == ")" && !open)
+                                {
+                                    done = true;
+                                    i--;
+                                }
                             }
                             if(!done && nxt.Key != "(")
                                 output += nxt.Key + " ";
                             if (!done && nxt.Key == "(")
+                            {
+                                open = true;
                                 output += nxt.Key;
+                            }
                             done = false;
                             pre = nxt.Key;
                             break;
@@ -104,16 +125,40 @@ namespace text.Speaker
                                 capitalize = false;
                                 done = true;
                             }
-                            if (wo.Key == ".")
+                            if (wo.Key == "." || wo.Key == "," || wo.Key == ")" || wo.Key == "'" || wo.Key == "-")
                             {
                                 output = output.Remove(output.Length - 1);
                                 if (wo.Key == ".")
+                                {
                                     capitalize = true;
+                                    if (open)
+                                    {
+                                        output += ".) ";
+                                        done = true;
+                                        open = false;
+                                    }
+                                }
+                                if (wo.Key == "'" || wo.Key == "-")
+                                {
+                                    output += wo.Key;
+                                    done = true;
+                                }
+                                if (wo.Key == ")" && !open)
+                                {
+                                    done = true;
+                                    i--;
+                                }
                             }
-                            if (!done)
+                            if (!done && wo.Key != "(")
                                 output += wo.Key + " ";
+                            if (!done && wo.Key == "(")
+                            {
+                                open = true;
+                                output += wo.Key;
+                            }
                             done = false;
                             pre = wo.Key;
+                            break;
                         }
                     }
                 }
