@@ -2,6 +2,9 @@
 engines:
   fixme:
     enabled: true
+    checks:
+      TODO:
+        enabled: false
 ratings:
   paths: []
 exclude_paths: []
