@@ -189,7 +189,10 @@ namespace text.Scorer
         }
         void digestBrain()
         {
-            Console.BackgroundColor = ConsoleColor.Blue;
+            lock (Console.Out)
+            {
+                Console.BackgroundColor = ConsoleColor.Blue;
+            }
             //Set path for brain
             var p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\brain.rouge";
             var inStr = File.ReadAllText(p);
@@ -225,7 +228,10 @@ namespace text.Scorer
         }
         void digestSpoken()
         {
-            Console.BackgroundColor = ConsoleColor.Yellow;
+            lock (Console.Out)
+            {
+                Console.BackgroundColor = ConsoleColor.Yellow;
+            }
             //If doing scoring digest spoken words
             var pre = "";
             var p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\text.output.txt";
