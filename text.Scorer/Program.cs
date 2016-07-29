@@ -11,6 +11,7 @@ namespace text.Scorer
     {
         Dictionary<string, brain> brain = new Dictionary<string, brain>();
         Dictionary<string, spoken> spokenWords = new Dictionary<string, spoken>();
+        public static Boolean _v = false;
         static void Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.White;
@@ -20,7 +21,6 @@ namespace text.Scorer
             WHOA*/
             var menu = true;
             var doScoring = true;
-            Boolean verbiose = false;
             bool error = false;
             drawMenu();
             while (menu)
@@ -43,11 +43,11 @@ namespace text.Scorer
                         doScoring = false;
                         break;
                     case ("3"):
-                        verbiose = OptionsMenu();
+                        _v = OptionsMenu();
                         drawMenu();
                         break;
                     case("o"):
-                        verbiose = OptionsMenu();
+                        _v = OptionsMenu();
                         drawMenu();
                         break;
                     default:
@@ -165,33 +165,36 @@ namespace text.Scorer
                 str += txt;
                 //Then do the same for nexts
                 var ni = 0;
+                if (_v)
+                {
+                    i++;
+                    Console.WriteLine("Word {0} of {1} '{2}' is being processed", i, thisClass.brain.Count, br.Key);
+                }
                 foreach (KeyValuePair<string, float> next in br.Value.nexts)
                 {
                     txt = "    " + String.Format(@"#{0} {1}", next.Key, next.Value) + Environment.NewLine;
                     str += txt;
-                    if (verbiose)
+                    if (_v)
                     {
                         ni++;
                         Console.WriteLine("Word {0} of {1} '{2}' in tree '{3}' is being processed", ni, br.Value.nexts.Count, next.Key,br.Key);
                     }
                 }
-                if(verbiose)
-                {
-                    i++;
-                    Console.WriteLine("Word {0} of {1} '{2}' is being processed",i,thisClass.brain.Count,br.Key);
-                }
             }
             //Delete and rewrite brain
             File.WriteAllText(p, "");
             File.AppendAllText(p, str);
-            if (error)
+            if (error || _v)
                 Console.Read();
         }
         void digestBrain()
         {
             lock (Console.Out)
             {
-                Console.BackgroundColor = ConsoleColor.Blue;
+                Console.ForegroundColor = ConsoleColor.Blue;
+                if (_v)
+                    Console.WriteLine("Digesting brain");
+                Console.ForegroundColor = ConsoleColor.White;            
             }
             //Set path for brain
             var p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\brain.rouge";
@@ -230,7 +233,10 @@ namespace text.Scorer
         {
             lock (Console.Out)
             {
-                Console.BackgroundColor = ConsoleColor.Yellow;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                if (_v)
+                    Console.WriteLine("Digesting spoken");
+                Console.ForegroundColor = ConsoleColor.White;
             }
             //If doing scoring digest spoken words
             var pre = "";
