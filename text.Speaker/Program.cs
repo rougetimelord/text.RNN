@@ -60,8 +60,8 @@ namespace text.Speaker
                 File.Delete(p);
             bool capitalize = false;
             bool done = false;
-            bool open = false;
-            for(int i = 0; i <= 28; i++)
+            int open = 0;
+            while(output.Length <= 140)
             {
                 if (words[pre].nexts.Count > 0)
                 {
@@ -82,28 +82,31 @@ namespace text.Speaker
                                 if (nxt.Key == ".")
                                 {
                                     capitalize = true;
-                                    if (open)
+                                    if (open > 0)
                                     {
-                                        output += ")";
+                                        output += ".) ";
                                         done = true;
-                                        open = false;
+                                        open--;
                                     }
                                 }
                                 if (nxt.Key == "'" || nxt.Key == "-"){
                                     output += nxt.Key;
                                     done = true;
                                 }
-                                if(nxt.Key == ")" && !open)
+                                if(nxt.Key == ")" && open <= 0)
                                 {
                                     done = true;
-                                    i--;
+                                }
+                                if(nxt.Key == ")" && open > 0)
+                                {
+                                    open--;
                                 }
                             }
                             if(!done && nxt.Key != "(")
                                 output += nxt.Key + " ";
                             if (!done && nxt.Key == "(")
                             {
-                                open = true;
+                                open++;
                                 output += nxt.Key;
                             }
                             done = false;
@@ -131,11 +134,11 @@ namespace text.Speaker
                                 if (wo.Key == ".")
                                 {
                                     capitalize = true;
-                                    if (open)
+                                    if (open > 0)
                                     {
                                         output += ".) ";
                                         done = true;
-                                        open = false;
+                                        open--;
                                     }
                                 }
                                 if (wo.Key == "'" || wo.Key == "-")
@@ -143,17 +146,20 @@ namespace text.Speaker
                                     output += wo.Key;
                                     done = true;
                                 }
-                                if (wo.Key == ")" && !open)
+                                if (wo.Key == ")" && open <= 0)
                                 {
                                     done = true;
-                                    i--;
+                                }
+                                if (wo.Key == ")" && open > 0)
+                                {
+                                    open--;
                                 }
                             }
                             if (!done && wo.Key != "(")
                                 output += wo.Key + " ";
                             if (!done && wo.Key == "(")
                             {
-                                open = true;
+                                open++;
                                 output += wo.Key;
                             }
                             done = false;
