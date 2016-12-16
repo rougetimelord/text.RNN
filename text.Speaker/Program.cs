@@ -9,14 +9,17 @@ namespace text.Speaker
 {
     class Program
     {
+        static Dictionary<string, word> words = new Dictionary<string, word>();
         static void Main(string[] args)
         {
+            //Find or create output file/directory then set post
             if(!Directory.Exists(@"\Users\" + Environment.UserName + @"\Documents\text.RNN"))
                 Directory.CreateDirectory(@"\Users\" + Environment.UserName + @"\Documents\text.RNN");
             var p = @"\Users\" + Environment.UserName + @"\Documents\text.RNN\brain.rouge";
+            //Read brain and split it
             var inStr = File.ReadAllText(p);
             var strArr = inStr.Split(new string[] { "\r\n", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-            Dictionary<string, word> words = new Dictionary<string, word>();
+            //Setup random function
             Random r = new Random();
             string output = "", pre = "";
             for (int i = 0; i < strArr.Count(); i++)
@@ -59,7 +62,6 @@ namespace text.Speaker
             if (File.Exists(p))
                 File.Delete(p);
             bool capitalize = false;
-            bool done = false;
             int open = 0;
             while(output.Length <= 140)
             {
@@ -70,46 +72,17 @@ namespace text.Speaker
                     {
                         if (nxt.Value.floorVar <= rResult && rResult < nxt.Value.floorVar + nxt.Value.points * 10000)
                         {
-                            if (capitalize == true)
-                            {
-                                output += nxt.Key.First().ToString().ToUpper() + nxt.Key.Substring(1) + " ";
-                                capitalize = false;
-                                done = true;
-                            }
-                            if (nxt.Key == "." || nxt.Key == "," || nxt.Key == ")" || nxt.Key == "'" || nxt.Key == "-")
-                            {
-                                output = output.Remove(output.Length - 1);
-                                if (nxt.Key == ".")
-                                {
-                                    capitalize = true;
-                                    if (open > 0)
-                                    {
-                                        output += ".) ";
-                                        done = true;
-                                        open--;
-                                    }
-                                }
-                                if (nxt.Key == "'" || nxt.Key == "-"){
-                                    output += nxt.Key;
-                                    done = true;
-                                }
-                                if(nxt.Key == ")" && open <= 0)
-                                {
-                                    done = true;
-                                }
-                                if(nxt.Key == ")" && open > 0)
-                                {
-                                    open--;
-                                }
-                            }
-                            if(!done && nxt.Key != "(")
-                                output += nxt.Key + " ";
-                            if (!done && nxt.Key == "(")
-                            {
+                            if (nxt.Key == ")" && open > 0)
+                                open--;
+                            if (nxt.Key == "(")
                                 open++;
-                                output += nxt.Key;
+                            if (nxt.Key == ".")
+                            {
+                                capitalize = true;
+                                if (open > 0)
+                                    open--;
                             }
-                            done = false;
+                            output += Format(nxt.Key, capitalize, open);
                             pre = nxt.Key;
                             break;
                         }
@@ -122,47 +95,17 @@ namespace text.Speaker
                     {
                         if (rResult >= wo.Value.floor && rResult < wo.Value.floor + (wo.Value.points * 10000))
                         {
-                            if (capitalize == true)
-                            {
-                                output += wo.Key.First().ToString().ToUpper() + wo.Key.Substring(1) + " ";
-                                capitalize = false;
-                                done = true;
-                            }
-                            if (wo.Key == "." || wo.Key == "," || wo.Key == ")" || wo.Key == "'" || wo.Key == "-")
-                            {
-                                output = output.Remove(output.Length - 1);
-                                if (wo.Key == ".")
-                                {
-                                    capitalize = true;
-                                    if (open > 0)
-                                    {
-                                        output += ".) ";
-                                        done = true;
-                                        open--;
-                                    }
-                                }
-                                if (wo.Key == "'" || wo.Key == "-")
-                                {
-                                    output += wo.Key;
-                                    done = true;
-                                }
-                                if (wo.Key == ")" && open <= 0)
-                                {
-                                    done = true;
-                                }
-                                if (wo.Key == ")" && open > 0)
-                                {
-                                    open--;
-                                }
-                            }
-                            if (!done && wo.Key != "(")
-                                output += wo.Key + " ";
-                            if (!done && wo.Key == "(")
-                            {
+                            if (wo.Key == ")" && open > 0)
+                                open--;
+                            if (wo.Key == "(")
                                 open++;
-                                output += wo.Key;
+                            if (wo.Key == ".")
+                            {
+                                capitalize = true;
+                                if (open > 0)
+                                    open--;
                             }
-                            done = false;
+                            output += Format(wo.Key, capitalize, open);
                             pre = wo.Key;
                             break;
                         }
@@ -173,6 +116,45 @@ namespace text.Speaker
             Console.Clear();
             Console.WriteLine("Done");
             Console.ReadLine();
+        }
+        static string Format(string word, bool capitalize, int open)
+        {
+            bool done = false;
+            string output = "";
+            if (capitalize == true)
+            {
+                output += word.First().ToString().ToUpper() + word.Substring(1) + " ";
+                capitalize = false;
+                done = true;
+            }
+            if (word == "." || word == "," || word == ")" || word == "'" || word == "-")
+            {
+                output = output.Remove(output.Length - 1);
+                if (word == ".")
+                {
+                    if (open > 0)
+                    {
+                        output += ".) ";
+                        done = true;
+                    }
+                }
+                if (word == "'" || word == "-")
+                {
+                    output += word;
+                    done = true;
+                }
+                if (word == ")" && open <= 0)
+                {
+                    done = true;
+                }
+            }
+            if (!done && word != "(")
+                output += word + " ";
+            if (!done && word == "(")
+            {
+                output += word;
+            }
+            return output;
         }
     }
 }
