@@ -73,17 +73,18 @@ namespace text.Learner
             Console.Clear();
             currPerc = 0; oldPerc = -1; i = 0;
             //For each entry in the words dictionary do some stuff
+            string txt = "";
+            int total = strList.Count;
             foreach (KeyValuePair<string, Word> wo in words.OrderByDescending(o => o.Value.count).ThenBy(s => s.Key).ToList())
             {
                 //Calculate percentages of word
-                float percent = (float)Math.Round(((float)wo.Value.count / (float)strList.Count) * 100,4);
-                string txt = String.Format(@"{0} {1}", wo.Key, percent) + Environment.NewLine;
-                File.AppendAllText(p, txt);
+                float percent = (float)Math.Round(((float)wo.Value.count / total) * 100,4);
+                txt += string.Format(@"{0} {1}", wo.Key, percent) + Environment.NewLine;
+                int nTotal = wo.Value.nexts.Count;
                 //Then do the same for nexts
                 foreach(KeyValuePair<string,float> next in wo.Value.nexts)
                 {
-                    txt = "    " + String.Format(@"#{0} {1}", next.Key, (float)Math.Round((next.Value / wo.Value.nexts.Count) * 100, 4))+Environment.NewLine;
-                    File.AppendAllText(p, txt);
+                    txt += "    " + string.Format(@"#{0} {1}", next.Key, (float)Math.Round((next.Value / nTotal) * 100, 4))+Environment.NewLine;
                 }
                 //Completion percentage
                 currPerc = (int)Math.Round(((float)i / (float)words.Count) * 100, 1);
@@ -95,6 +96,7 @@ namespace text.Learner
                 }
                 i++;
             }
+            File.AppendAllText(p, txt);
             #endregion
             Environment.Exit(0);
         }
