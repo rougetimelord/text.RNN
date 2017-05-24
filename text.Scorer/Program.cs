@@ -12,7 +12,7 @@ namespace text.Scorer
         Dictionary<string, brain> brain = new Dictionary<string, brain>();
         Dictionary<string, spoken> spokenWords = new Dictionary<string, spoken>();
         public static Boolean _v = false;
-        static void Main(string[] args)
+        static void Main()
         {
             Console.ForegroundColor = ConsoleColor.White;
             Program thisClass = new Program();
@@ -177,7 +177,7 @@ namespace text.Scorer
                     if (_v)
                     {
                         ni++;
-                        Console.WriteLine("Word {0} of {1} '{2}' in tree '{3}' is being processed", ni, br.Value.nexts.Count, next.Key,br.Key);
+                        Console.WriteLine("    Branch {0} of {1} '{2}' in tree '{3}' is being processed", ni, br.Value.nexts.Count, next.Key,br.Key);
                     }
                 }
             }
@@ -186,6 +186,7 @@ namespace text.Scorer
             File.AppendAllText(p, str);
             if (error || _v)
                 Console.Read();
+            Main();
         }
         void digestBrain()
         {

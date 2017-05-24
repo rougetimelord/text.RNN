@@ -9,7 +9,7 @@ namespace text.Speaker
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             //Find or create output file/directory then set post
             if(!Directory.Exists(@"\Users\" + Environment.UserName + @"\Documents\text.RNN"))
@@ -150,8 +150,10 @@ namespace text.Speaker
             //Write text and tell user we're done
             File.AppendAllText(p, output);
             Console.Clear();
+            Console.WriteLine(output);
             Console.WriteLine("Done");
             Console.ReadLine();
+            Main();
         }
         static string Format(string word, bool capitalize, int open)
         {
